@@ -10,40 +10,40 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #0d0f1a;
-  --surface:  #151824;
-  --card:     #1c2035;
-  --border:   #272d45;
-  --border2:  #323a58;
-  --text:     #e8eaf6;
-  --muted:    #7b82a8;
-  --subtle:   #4a5175;
+  --bg:       #fff7f4;
+  --surface:  #fdeee8;
+  --card:     #ffffff;
+  --border:   #fad8cc;
+  --border2:  #f5c0ae;
+  --text:     #3a1f18;
+  --muted:    #a06050;
+  --subtle:   #d4a090;
 
-  --green:    #22c55e;
-  --green-lt: #0f2a1a;
-  --green-bd: #166534;
+  --green:    #2e8b6e;
+  --green-lt: #e8f7f2;
+  --green-bd: #9ed4c4;
 
-  --amber:    #f59e0b;
-  --amber-lt: #2a1f08;
-  --amber-bd: #92400e;
+  --amber:    #c97b1a;
+  --amber-lt: #fef6e4;
+  --amber-bd: #f5c97a;
 
-  --red:      #ef4444;
-  --red-lt:   #2a0f0f;
-  --red-bd:   #7f1d1d;
+  --red:      #d94040;
+  --red-lt:   #fdeaea;
+  --red-bd:   #f5aaaa;
 
-  --blue:     #6366f1;
-  --blue-lt:  #13143a;
-  --blue-bd:  #3730a3;
-  --cyan:     #22d3ee;
-  --violet:   #a855f7;
+  --blue:     #e8623a;
+  --blue-lt:  #fdeee8;
+  --blue-bd:  #f5c0ae;
+  --cyan:     #d4845a;
+  --violet:   #e07060;
 
-  --grad:     linear-gradient(135deg, #6366f1, #a855f7);
-  --grad2:    linear-gradient(135deg, #22d3ee, #6366f1);
+  --grad:     linear-gradient(135deg, #f97c5a, #ffb347);
+  --grad2:    linear-gradient(135deg, #ffb347, #f97c5a);
 
   --r:  10px;
   --rl: 16px;
-  --sh: 0 2px 8px rgba(0,0,0,.4);
-  --shm:0 8px 24px rgba(0,0,0,.5);
+  --sh: 0 2px 12px rgba(232,98,58,.10);
+  --shm:0 8px 28px rgba(232,98,58,.16);
 }
 
 html { scroll-behavior: smooth; }
@@ -62,8 +62,8 @@ body::before {
   content: '';
   position: fixed; inset: 0;
   background-image:
-    linear-gradient(rgba(99,102,241,.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99,102,241,.04) 1px, transparent 1px);
+    linear-gradient(rgba(249,124,90,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(249,124,90,.08) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
   z-index: 0;
@@ -90,11 +90,11 @@ body::before {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   font-weight: 500;
-  color: var(--cyan);
+  color: #c04e28;
   letter-spacing: .14em;
   text-transform: uppercase;
-  background: rgba(34,211,238,.08);
-  border: 1px solid rgba(34,211,238,.2);
+  background: rgba(249,124,90,.12);
+  border: 1px solid rgba(249,124,90,.28);
   padding: 6px 14px;
   border-radius: 100px;
   margin-bottom: 20px;
@@ -102,7 +102,7 @@ body::before {
 
 .pulse {
   width: 6px; height: 6px;
-  background: var(--cyan);
+  background: var(--blue);
   border-radius: 50%;
   animation: pulse 2s ease-in-out infinite;
 }
@@ -118,6 +118,7 @@ body::before {
   letter-spacing: -1.5px;
   line-height: 1.1;
   margin-bottom: 14px;
+  color: var(--text);
 }
 
 .hero h1 .grad-text {
@@ -324,7 +325,7 @@ input[type="text"]:focus {
 
 .loader-ring {
   width: 52px; height: 52px;
-  border: 3px solid var(--border);
+  border: 3px solid var(--border2);
   border-top-color: var(--blue);
   border-radius: 50%;
   animation: spin .8s linear infinite;
@@ -381,7 +382,7 @@ input[type="text"]:focus {
   position: absolute;
   top: -40px; right: -40px;
   width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(99,102,241,.12), transparent 70%);
+  background: radial-gradient(circle, rgba(249,124,90,.14), transparent 70%);
   pointer-events: none;
 }
 
@@ -503,7 +504,7 @@ input[type="text"]:focus {
   content: '';
   flex: 1;
   height: 1px;
-  background: var(--border);
+  background: var(--border2);
 }
 
 /* ── Skill grid ────────────────────────────────────────────────*/
@@ -545,9 +546,9 @@ input[type="text"]:focus {
   border: 1px solid transparent;
 }
 
-.tag-matched { background: rgba(34,197,94,.12);  color: #4ade80; border-color: rgba(34,197,94,.25); }
-.tag-missing { background: rgba(239,68,68,.12);  color: #f87171; border-color: rgba(239,68,68,.25); }
-.tag-bonus   { background: rgba(99,102,241,.12); color: #818cf8; border-color: rgba(99,102,241,.25); }
+.tag-matched { background: #e8f7f2; color: #2e8b6e; border-color: #9ed4c4; }
+.tag-missing { background: #fdeaea; color: #d94040; border-color: #f5aaaa; }
+.tag-bonus   { background: #fff0ea; color: #c04e28; border-color: #f5c0ae; }
 
 /* ── Category breakdown ────────────────────────────────────────*/
 .cat-list {
@@ -693,7 +694,7 @@ input[type="file"] { display: none; }
     <!-- Resume -->
     <div class="upload-card">
       <div class="upload-card-label">
-        <span class="label-dot" style="background:#22c55e"></span>
+        <span class="label-dot" style="background:#2e8b6e"></span>
         Candidate Resume
       </div>
       <div class="drop-zone" id="resumeDrop">
@@ -708,7 +709,7 @@ input[type="file"] { display: none; }
     <!-- JD -->
     <div class="upload-card">
       <div class="upload-card-label">
-        <span class="label-dot" style="background:#6366f1"></span>
+        <span class="label-dot" style="background:#e8623a"></span>
         Job Description
       </div>
       <div class="drop-zone" id="jdDrop">
@@ -776,17 +777,17 @@ input[type="file"] { display: none; }
     <!-- Score strip -->
     <div class="score-strip">
       <div class="score-tile">
-        <div class="st-val" id="skillScore" style="color:var(--cyan)">—</div>
+        <div class="st-val" id="skillScore" style="color:#e8623a">—</div>
         <div class="st-lbl">Skill Match</div>
         <div class="st-sub">70% weight</div>
       </div>
       <div class="score-tile">
-        <div class="st-val" id="expScore" style="color:var(--violet)">—</div>
+        <div class="st-val" id="expScore" style="color:#d4845a">—</div>
         <div class="st-lbl">Experience</div>
         <div class="st-sub">15% weight</div>
       </div>
       <div class="score-tile">
-        <div class="st-val" id="eduScore" style="color:var(--amber)">—</div>
+        <div class="st-val" id="eduScore" style="color:#2e8b6e">—</div>
         <div class="st-lbl">Education</div>
         <div class="st-sub">15% weight</div>
       </div>
@@ -990,7 +991,7 @@ function renderCategories(d) {
   const el = document.getElementById('catList');
   el.innerHTML = '';
 
-  const colors = ['#6366f1','#22d3ee','#22c55e','#f59e0b','#a855f7','#ef4444','#f97316'];
+  const colors = ['#e8623a','#d4845a','#2e8b6e','#c97b1a','#f0a070','#d94040','#c04e28'];
   Object.entries(allCats).sort((a,b) => b[1].total - a[1].total).forEach(([cat, data], i) => {
     const pct = Math.round((data.matched / data.total) * 100);
     const color = colors[i % colors.length];
@@ -1058,11 +1059,11 @@ function drawRadar(d) {
       datasets: [{
         label: 'Match %',
         data: matched,
-        backgroundColor: 'rgba(99,102,241,.15)',
-        borderColor: '#6366f1',
+        backgroundColor: 'rgba(249,124,90,.15)',
+        borderColor: '#e8623a',
         borderWidth: 2,
-        pointBackgroundColor: '#6366f1',
-        pointBorderColor: '#151824',
+        pointBackgroundColor: '#f97c5a',
+        pointBorderColor: '#ffffff',
         pointBorderWidth: 2,
         pointRadius: 5,
         pointHoverRadius: 7,
@@ -1075,10 +1076,10 @@ function drawRadar(d) {
       scales: {
         r: {
           min: 0, max: 100,
-          ticks: { stepSize:25, color:'#4a5175', backdropColor:'transparent', font:{ family:'Sora', size:9 } },
-          grid:        { color:'rgba(99,102,241,.15)' },
-          angleLines:  { color:'rgba(99,102,241,.2)' },
-          pointLabels: { color:'#7b82a8', font:{ family:'Sora', size:11, weight:'600' }, padding:12 },
+          ticks: { stepSize:25, color:'#d4a090', backdropColor:'transparent', font:{ family:'Sora', size:9 } },
+          grid:        { color:'rgba(249,124,90,.18)' },
+          angleLines:  { color:'rgba(249,124,90,.22)' },
+          pointLabels: { color:'#a06050', font:{ family:'Sora', size:11, weight:'600' }, padding:12 },
         }
       }
     }
