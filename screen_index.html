@@ -977,7 +977,7 @@ function renderTags(containerId, skills, cls) {
 
 function renderCategories(d) {
   const allCats = {};
-  // Build per-category matched vs required counts
+  
   Object.entries(d.matched_by_cat).forEach(([cat, skills]) => {
     allCats[cat] = allCats[cat] || { matched:0, total:0 };
     allCats[cat].matched += skills.length;
