@@ -10,39 +10,39 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #fff7f4;
-  --surface:  #fdeee8;
+  --bg:       #f0f5ff;
+  --surface:  #e4edff;
   --card:     #ffffff;
-  --border:   #fad8cc;
-  --border2:  #f5c0ae;
-  --text:     #3a1f18;
-  --muted:    #a06050;
-  --subtle:   #d4a090;
+  --border:   #c7d9f8;
+  --border2:  #a8c4f5;
+  --text:     #0f1f3d;
+  --muted:    #4a6fa5;
+  --subtle:   #90aad4;
 
-  --green:    #2e8b6e;
-  --green-lt: #e8f7f2;
-  --green-bd: #9ed4c4;
+  --green:    #1a7f5a;
+  --green-lt: #e6f7f1;
+  --green-bd: #86cdb0;
 
-  --amber:    #c97b1a;
-  --amber-lt: #fef6e4;
-  --amber-bd: #f5c97a;
+  --amber:    #b06a00;
+  --amber-lt: #fff8e6;
+  --amber-bd: #f0c96a;
 
-  --red:      #d94040;
+  --red:      #c0392b;
   --red-lt:   #fdeaea;
   --red-bd:   #f5aaaa;
 
-  --blue:     #e8623a;
-  --blue-lt:  #fdeee8;
-  --blue-bd:  #f5c0ae;
-  --cyan:     #d4845a;
-  --violet:   #e07060;
+  --blue:     #2563eb;
+  --blue-lt:  #e8f0fe;
+  --blue-bd:  #93b8f8;
+  --cyan:     #0ea5e9;
+  --violet:   #4f46e5;
 
-  --grad:     linear-gradient(135deg, #f97c5a, #ffb347);
+  --grad:     linear-gradient(135deg, #2563eb, #4f46e5);
 
   --r:  10px;
   --rl: 16px;
-  --sh: 0 2px 12px rgba(232,98,58,.10);
-  --shm:0 8px 28px rgba(232,98,58,.16);
+  --sh: 0 2px 12px rgba(37,99,235,.10);
+  --shm:0 8px 28px rgba(37,99,235,.18);
 }
 
 html { scroll-behavior: smooth; }
@@ -60,8 +60,8 @@ body::before {
   content: '';
   position: fixed; inset: 0;
   background-image:
-    linear-gradient(rgba(249,124,90,.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(249,124,90,.08) 1px, transparent 1px);
+    linear-gradient(rgba(37,99,235,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,.07) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
   z-index: 0;
@@ -116,8 +116,8 @@ body::before {
 .hero-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
   font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500;
-  color: #c04e28; letter-spacing: .14em; text-transform: uppercase;
-  background: rgba(249,124,90,.12); border: 1px solid rgba(249,124,90,.28);
+  color: #1d4ed8; letter-spacing: .14em; text-transform: uppercase;
+  background: rgba(37,99,235,.10); border: 1px solid rgba(37,99,235,.25);
   padding: 6px 14px; border-radius: 100px; margin-bottom: 18px;
 }
 
@@ -217,7 +217,7 @@ input[type="text"]:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(2
 .st-sub { font-size:10px; color:var(--subtle); margin-top:2px; font-family:'JetBrains Mono',monospace; }
 
 /* ── Candidate summary ─────────────────────────────────────────*/
-.summary-box { background:var(--amber-lt); border:1px solid var(--amber-bd); border-radius:var(--rl); padding:18px 20px; margin-bottom:14px; font-size:13px; color:var(--text); line-height:1.75; }
+.summary-box { background:var(--blue-lt); border:1px solid var(--blue-bd); border-radius:var(--rl); padding:18px 20px; margin-bottom:14px; font-size:13px; color:var(--text); line-height:1.75; }
 .summary-box .summary-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--amber); margin-bottom:6px; }
 
 /* ── Skills panel ──────────────────────────────────────────────*/
@@ -356,7 +356,7 @@ input[type="text"]:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(2
 
     <div class="upload-grid">
       <div class="card"><div class="card-body">
-        <div class="card-label"><span class="label-dot" style="background:#2e8b6e"></span>Candidate Resume</div>
+        <div class="card-label"><span class="label-dot" style="background:#1a7f5a"></span>Candidate Resume</div>
         <div class="drop-zone" id="resumeDrop">
           <span class="dz-icon">📄</span>
           <div class="dz-title">Drop resume here</div>
@@ -367,7 +367,7 @@ input[type="text"]:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(2
       </div></div>
 
       <div class="card"><div class="card-body">
-        <div class="card-label"><span class="label-dot" style="background:#e8623a"></span>Job Description</div>
+        <div class="card-label"><span class="label-dot" style="background:#2563eb"></span>Job Description</div>
         <div class="drop-zone" id="jdDrop">
           <span class="dz-icon">💼</span>
           <div class="dz-title">Drop job description here</div>
@@ -421,9 +421,9 @@ input[type="text"]:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(2
 
       <!-- Score strip -->
       <div class="score-strip">
-        <div class="score-tile"><div class="st-val" id="skillScore" style="color:#e8623a">—</div><div class="st-lbl">Skill Match</div><div class="st-sub">70% weight</div></div>
-        <div class="score-tile"><div class="st-val" id="expScore"   style="color:#d4845a">—</div><div class="st-lbl">Experience</div><div class="st-sub">15% weight</div></div>
-        <div class="score-tile"><div class="st-val" id="eduScore"   style="color:#2e8b6e">—</div><div class="st-lbl">Education</div><div class="st-sub">15% weight</div></div>
+        <div class="score-tile"><div class="st-val" id="skillScore" style="color:#2563eb">—</div><div class="st-lbl">Skill Match</div><div class="st-sub">70% weight</div></div>
+        <div class="score-tile"><div class="st-val" id="expScore"   style="color:#4f46e5">—</div><div class="st-lbl">Experience</div><div class="st-sub">15% weight</div></div>
+        <div class="score-tile"><div class="st-val" id="eduScore"   style="color:#0ea5e9">—</div><div class="st-lbl">Education</div><div class="st-sub">15% weight</div></div>
       </div>
 
       <!-- Candidate Summary -->
@@ -502,7 +502,7 @@ input[type="text"]:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(2
   <div class="tab-pane" id="tab-multi">
 
     <div class="card" style="margin-bottom:14px"><div class="card-body">
-      <div class="card-label"><span class="label-dot" style="background:#e8623a"></span>Job Description (shared)</div>
+      <div class="card-label"><span class="label-dot" style="background:#2563eb"></span>Job Description (shared)</div>
       <div class="drop-zone" id="jdDropMulti">
         <span class="dz-icon">💼</span>
         <div class="dz-title">Drop job description here</div>
@@ -513,7 +513,7 @@ input[type="text"]:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(2
     </div></div>
 
     <div class="card" style="margin-bottom:14px"><div class="card-body">
-      <div class="card-label"><span class="label-dot" style="background:#2e8b6e"></span>Candidate Resumes</div>
+      <div class="card-label"><span class="label-dot" style="background:#1a7f5a"></span>Candidate Resumes</div>
       <div class="multi-resume-list" id="multiResumeList">
         <!-- rows added dynamically -->
       </div>
@@ -798,7 +798,7 @@ function renderMulti(data) {
   Object.values(compareRadarCharts).forEach(c => c.destroy());
 
   const medals = ['🥇','🥈','🥉'];
-  const colors  = ['#e8623a','#d4845a','#2e8b6e','#c97b1a','#d94040'];
+  const colors  = ['#2563eb','#4f46e5','#0ea5e9','#7c3aed','#0369a1'];
   const recColorMap = { green:'var(--green)', amber:'var(--amber)', red:'var(--red)' };
 
   data.results.forEach((r, i) => {
@@ -853,15 +853,15 @@ function renderMulti(data) {
       <!-- 3-score strip -->
       <div class="compare-score-strip">
         <div class="compare-score-tile">
-          <div class="cst-val" style="color:#e8623a">${r.skill_score}%</div>
+          <div class="cst-val" style="color:#2563eb">${r.skill_score}%</div>
           <div class="cst-lbl">Skills</div>
         </div>
         <div class="compare-score-tile">
-          <div class="cst-val" style="color:#d4845a">${r.exp_score}%</div>
+          <div class="cst-val" style="color:#4f46e5">${r.exp_score}%</div>
           <div class="cst-lbl">Experience</div>
         </div>
         <div class="compare-score-tile">
-          <div class="cst-val" style="color:#2e8b6e">${r.edu_score}%</div>
+          <div class="cst-val" style="color:#0ea5e9">${r.edu_score}%</div>
           <div class="cst-lbl">Education</div>
         </div>
       </div>
@@ -949,10 +949,10 @@ function drawCompareRadar(i, d, accentColor) {
       scales: {
         r: {
           min:0, max:100,
-          ticks:{ stepSize:25, color:'#d4a090', backdropColor:'transparent', font:{family:'Sora',size:8} },
-          grid:{ color:'rgba(249,124,90,.15)' },
-          angleLines:{ color:'rgba(249,124,90,.2)' },
-          pointLabels:{ color:'#a06050', font:{family:'Sora',size:9,weight:'600'}, padding:8 },
+          ticks:{ stepSize:25, color:'#90aad4', backdropColor:'transparent', font:{family:'Sora',size:8} },
+          grid:{ color:'rgba(37,99,235,.15)' },
+          angleLines:{ color:'rgba(37,99,235,.20)' },
+          pointLabels:{ color:'#4a6fa5', font:{family:'Sora',size:9,weight:'600'}, padding:8 },
         }
       }
     }
@@ -973,7 +973,7 @@ function renderCategories(containerId, d) {
   Object.entries(d.missing_by_cat||{}).forEach(([cat,skills]) => { allCats[cat] = allCats[cat]||{matched:0,total:0}; allCats[cat].total+=skills.length; });
   const el = document.getElementById(containerId);
   el.innerHTML = '';
-  const colors = ['#e8623a','#d4845a','#2e8b6e','#c97b1a','#f0a070','#d94040','#c04e28'];
+  const colors = ['#2563eb','#4f46e5','#0ea5e9','#1a7f5a','#7c3aed','#c0392b','#0369a1'];
   Object.entries(allCats).sort((a,b)=>b[1].total-a[1].total).forEach(([cat,data],i) => {
     const pct = Math.round((data.matched/data.total)*100);
     const color = colors[i%colors.length];
