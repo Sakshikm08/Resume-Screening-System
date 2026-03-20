@@ -296,14 +296,30 @@ input[type="text"]:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(2
 .lb-empty { text-align:center; padding:40px; color:var(--subtle); font-size:13px; }
 
 /* ── Multi compare cards ───────────────────────────────────────*/
-.compare-grid { display:grid; gap:14px; }
-.compare-card { background:var(--card); border:1px solid var(--border); border-radius:var(--rl); padding:18px 20px; display:grid; grid-template-columns:auto 1fr auto; gap:16px; align-items:center; }
-.compare-rank-badge { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800; flex-shrink:0; }
-.compare-name  { font-size:14px; font-weight:700; margin-bottom:2px; }
+/* compare grid - side by side */
+.compare-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:18px; align-items:start; }
+.compare-card { background:var(--card); border:1px solid var(--border); border-radius:var(--rl); padding:20px; animation:fadeUp .4s ease both; }
+.compare-card-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+.compare-rank-badge { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:800; flex-shrink:0; }
+.compare-name  { font-size:15px; font-weight:800; margin-bottom:2px; }
 .compare-sub   { font-size:11px; color:var(--muted); }
-.compare-score { font-size:22px; font-weight:800; font-family:'JetBrains Mono',monospace; }
-.compare-bar-track { height:5px; background:var(--surface); border-radius:100px; overflow:hidden; margin-top:6px; }
-.compare-bar-fill  { height:100%; border-radius:100px; background:var(--grad); width:0; transition:width 1s cubic-bezier(.4,0,.2,1); }
+.compare-score-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.compare-score { font-size:28px; font-weight:800; font-family:'JetBrains Mono',monospace; }
+.compare-bar-track { height:6px; background:var(--surface); border-radius:100px; overflow:hidden; margin-bottom:14px; }
+.compare-bar-fill  { height:100%; border-radius:100px; width:0; transition:width 1.1s cubic-bezier(.4,0,.2,1); }
+.compare-score-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
+.compare-score-tile { background:var(--surface); border-radius:var(--r); padding:10px 8px; text-align:center; }
+.cst-val { font-size:15px; font-weight:800; font-variant-numeric:tabular-nums; }
+.cst-lbl { font-size:9px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.06em; margin-top:2px; }
+.compare-section-hd { font-size:10px; font-weight:700; color:var(--subtle); text-transform:uppercase; letter-spacing:.09em; margin-bottom:8px; margin-top:12px; }
+.compare-radar-wrap { background:var(--surface); border-radius:var(--r); padding:10px; display:flex; justify-content:center; }
+.compare-tags { display:flex; flex-wrap:wrap; gap:5px; }
+.compare-profile-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid var(--border); font-size:11px; }
+.compare-profile-row:last-child { border-bottom:none; }
+.compare-iq { font-size:12px; color:var(--text); padding:8px 10px; background:var(--surface); border-radius:8px; border-left:3px solid var(--border2); margin-bottom:6px; line-height:1.5; }
+.compare-iq.type-gap    { border-left-color:var(--red); }
+.compare-iq.type-verify { border-left-color:var(--green); }
+.compare-iq.type-general{ border-left-color:var(--cyan); }
 
 /* ── Responsive ────────────────────────────────────────────────*/
 @media (max-width:600px) {
@@ -770,37 +786,177 @@ function renderSingle(d) {
 }
 
 // ── Render Multi ──────────────────────────────────────────────
+// per-candidate radar chart instances
+const compareRadarCharts = {};
+
 function renderMulti(data) {
   document.getElementById('multiJobLabel').textContent = data.job_title;
   const grid = document.getElementById('compareGrid');
   grid.innerHTML = '';
+
+  // destroy old radar charts
+  Object.values(compareRadarCharts).forEach(c => c.destroy());
+
   const medals = ['🥇','🥈','🥉'];
-  const colors  = ['#e8623a','#d4845a','#2e8b6e'];
+  const colors  = ['#e8623a','#d4845a','#2e8b6e','#c97b1a','#d94040'];
+  const recColorMap = { green:'var(--green)', amber:'var(--amber)', red:'var(--red)' };
 
   data.results.forEach((r, i) => {
-    const medal = medals[i] || `#${i+1}`;
-    const color = colors[i] || '#a06050';
-    const recColorMap = { green: 'var(--green)', amber: 'var(--amber)', red: 'var(--red)' };
-    const recColor = recColorMap[r.rec_color] || 'var(--muted)';
+    if (r.error) return;
+    const medal   = medals[i] || `#${i+1}`;
+    const color   = colors[i % colors.length];
+    const recColor= recColorMap[r.rec_color] || 'var(--muted)';
+    const recCls  = r.rec_color === 'green' ? 'rec-green' : r.rec_color === 'amber' ? 'rec-amber' : 'rec-red';
+
+    // build matched/missing tag html
+    const matchedHtml = (r.matched_skills||[]).slice(0,8).map(s => `<span class="skill-tag tag-matched">${s}</span>`).join('') || '<span style="font-size:11px;color:var(--subtle)">None</span>';
+    const missingHtml = (r.missing_skills||[]).slice(0,8).map(s => `<span class="skill-tag tag-missing">${s}</span>`).join('') || '<span style="font-size:11px;color:var(--subtle)">None</span>';
+
+    // interview questions html (first 3)
+    const iqHtml = (r.interview_questions||[]).slice(0,3).map(q =>
+      `<div class="compare-iq type-${q.type}"><strong style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted)">${q.skill}</strong><br/>${q.question}</div>`
+    ).join('');
+
+    // learning resources html (first 4)
+    const lrHtml = (r.learning_resources||[]).slice(0,4).map(lr =>
+      `<a href="${lr.url}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--blue);padding:4px 9px;background:var(--blue-lt);border:1px solid var(--blue-bd);border-radius:6px;text-decoration:none;margin:3px 3px 3px 0">${lr.skill} ↗</a>`
+    ).join('');
 
     const card = document.createElement('div');
     card.className = 'compare-card';
-    card.style.animationDelay = `${i * 80}ms`;
+    card.style.animationDelay = `${i * 100}ms`;
     card.innerHTML = `
-      <div class="compare-rank-badge" style="background:${color}22;color:${color};font-size:${i<3?'20px':'15px'}">${medal}</div>
-      <div>
-        <div class="compare-name">${r.candidate_name}</div>
-        <div class="compare-sub" style="color:${recColor}">${r.recommendation || '—'} · ${r.total_matched||0} matched · ${r.total_missing||0} missing</div>
-        <div class="compare-bar-track"><div class="compare-bar-fill" id="cbar${i}" style="background:linear-gradient(90deg,${color},${color}88)"></div></div>
+      <!-- Header -->
+      <div class="compare-card-header">
+        <div class="compare-rank-badge" style="background:${color}22;color:${color}">${medal}</div>
+        <div style="flex:1">
+          <div class="compare-name">${r.candidate_name}</div>
+          <div class="compare-sub">${r.job_title}</div>
+        </div>
+        <span class="rec-badge ${recCls}">${r.recommendation||'—'}</span>
       </div>
-      <div class="compare-score" style="color:${color}">${r.total_score}%</div>
+
+      <!-- Score row -->
+      <div class="compare-score-row">
+        <div>
+          <div class="compare-score" style="color:${color}">${r.total_score}%</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Overall Match</div>
+        </div>
+        <div style="text-align:right;font-size:12px;color:var(--muted);line-height:1.7">
+          ${r.total_matched} matched<br/>${r.total_missing} missing
+        </div>
+      </div>
+      <div class="compare-bar-track">
+        <div class="compare-bar-fill" id="cbar${i}" style="background:linear-gradient(90deg,${color},${color}88)"></div>
+      </div>
+
+      <!-- 3-score strip -->
+      <div class="compare-score-strip">
+        <div class="compare-score-tile">
+          <div class="cst-val" style="color:#e8623a">${r.skill_score}%</div>
+          <div class="cst-lbl">Skills</div>
+        </div>
+        <div class="compare-score-tile">
+          <div class="cst-val" style="color:#d4845a">${r.exp_score}%</div>
+          <div class="cst-lbl">Experience</div>
+        </div>
+        <div class="compare-score-tile">
+          <div class="cst-val" style="color:#2e8b6e">${r.edu_score}%</div>
+          <div class="cst-lbl">Education</div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="compare-section-hd">📝 Summary</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.65;background:var(--amber-lt);border:1px solid var(--amber-bd);border-radius:var(--r);padding:10px 12px;margin-bottom:4px">${r.summary||'—'}</div>
+
+      <!-- Radar chart -->
+      <div class="compare-section-hd">📊 Skill Coverage Radar</div>
+      <div class="compare-radar-wrap">
+        <canvas id="cRadar${i}" width="280" height="280" style="width:100%;max-width:280px;height:auto;display:block"></canvas>
+      </div>
+
+      <!-- Matched skills -->
+      <div class="compare-section-hd">✓ Matched Skills</div>
+      <div class="compare-tags">${matchedHtml}</div>
+
+      <!-- Missing skills -->
+      <div class="compare-section-hd">✕ Missing Skills</div>
+      <div class="compare-tags">${missingHtml}</div>
+
+      <!-- Profile -->
+      <div class="compare-section-hd">👤 Profile</div>
+      <div style="background:var(--surface);border-radius:var(--r);padding:2px 12px">
+        <div class="compare-profile-row"><span style="color:var(--muted)">Experience</span><span style="font-weight:700;font-family:'JetBrains Mono',monospace;font-size:11px">${r.resume_experience ? r.resume_experience+' yrs' : 'Not stated'}</span></div>
+        <div class="compare-profile-row"><span style="color:var(--muted)">Education</span><span style="font-weight:700;font-family:'JetBrains Mono',monospace;font-size:11px">${r.resume_education||'—'}</span></div>
+        <div class="compare-profile-row"><span style="color:var(--muted)">Seniority</span><span style="font-weight:700;font-family:'JetBrains Mono',monospace;font-size:11px">${r.resume_seniority||'—'}</span></div>
+      </div>
+
+      <!-- Interview Qs -->
+      <div class="compare-section-hd">🎤 Interview Questions</div>
+      ${iqHtml || '<div style="font-size:12px;color:var(--subtle)">None generated.</div>'}
+
+      <!-- Learning Resources -->
+      <div class="compare-section-hd">📚 Learning Resources</div>
+      <div>${lrHtml || '<div style="font-size:12px;color:var(--subtle)">No gaps with known resources.</div>'}</div>
     `;
     grid.appendChild(card);
-    setTimeout(() => { const b = document.getElementById(`cbar${i}`); if(b) b.style.width = r.total_score + '%'; }, 100 + i*80);
+
+    // animate bar
+    setTimeout(() => { const b = document.getElementById(`cbar${i}`); if(b) b.style.width = r.total_score + '%'; }, 150 + i*100);
+
+    // draw radar after card is in DOM
+    setTimeout(() => { drawCompareRadar(i, r, color); }, 200 + i*100);
   });
 
   document.getElementById('multiResults').style.display = 'block';
   document.getElementById('multiResults').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function drawCompareRadar(i, d, accentColor) {
+  const canvas = document.getElementById(`cRadar${i}`);
+  if (!canvas) return;
+  const ctx  = canvas.getContext('2d');
+  if (compareRadarCharts[i]) compareRadarCharts[i].destroy();
+
+  const cats = [...new Set([...Object.keys(d.matched_by_cat||{}), ...Object.keys(d.missing_by_cat||{})])];
+  const vals  = cats.map(cat => {
+    const m = (d.matched_by_cat[cat]||[]).length;
+    const t = m + (d.missing_by_cat[cat]||[]).length;
+    return t ? Math.round((m/t)*100) : 0;
+  });
+
+  compareRadarCharts[i] = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: cats,
+      datasets:[{
+        data: vals,
+        backgroundColor: accentColor + '22',
+        borderColor: accentColor,
+        borderWidth: 2,
+        pointBackgroundColor: accentColor,
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      }]
+    },
+    options: {
+      responsive: false,
+      layout: { padding: { top:16, bottom:16, left:16, right:16 } },
+      plugins: { legend:{ display:false } },
+      scales: {
+        r: {
+          min:0, max:100,
+          ticks:{ stepSize:25, color:'#d4a090', backdropColor:'transparent', font:{family:'Sora',size:8} },
+          grid:{ color:'rgba(249,124,90,.15)' },
+          angleLines:{ color:'rgba(249,124,90,.2)' },
+          pointLabels:{ color:'#a06050', font:{family:'Sora',size:9,weight:'600'}, padding:8 },
+        }
+      }
+    }
+  });
 }
 
 // ── Render helpers ────────────────────────────────────────────
